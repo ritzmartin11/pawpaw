@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latest Pet Care Tips - Pet Care Guide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+
+        /* Main Content Styles */
+        .dashboard-content {
+            margin-left: 280px;
+            padding: 20px;
+        }
+
+        .content-header {
+            margin-bottom: 30px;
+        }
+
+        .content-header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .content-header p {
+            color: #666;
+            margin: 0;
+        }
+
+        /* Breed Header Styles */
+        .breed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0 1rem;
+        }
+
+        .breed-tabs {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .breed-tab {
+            padding: 0.75rem 1.5rem;
+            border: 1px solid #000;
+            border-radius: 0.5rem;
+            background: #e9e9e9;
+            color: #000;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .breed-tab.active {
+            background: #D7AC1D;
+            color: black;
+            border: 1px solid black;
+        }
+
+        .search-container {
+            position: relative;
+            width: 300px;
+            border: 1px solid #000;
+            border-radius: 0.5rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            background: #fff;
+            color: #333;
+        }
+
+        /* Pet Care Grid Styles - Updated to two columns */
+
+
+        .petcare-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Updated to two columns */
+            gap: 20px;
+        }
+
+        .petcare-card {
+            background: #E2B206;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            border: 1px solid #eee;
+            padding: 30px 30px;
+        }
+
+        .petcare-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .petcare-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .petcare-info {
+            padding: 15px;
+        }
+
+        .petcare-name {
+            font-size: 1.2rem;
+            margin: 0 0 0.5rem 0;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .petcare-description {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            font-size: 1.1rem;
+            grid-column: 1 / -1;
+        }
+
+        /* Breed Section Styles */
+        .breed-section {
+            display: none;
+        }
+
+        .breed-section.active {
+            display: block;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 850px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-grid {
+            display: flex;
+            height: 100%;
+        }
+
+        .modal-image-side {
+            width: 40%;
+            background: #f8f8f8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .modal-image-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-image-side img {
+            max-width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .breed-title {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .breed-title h2 {
+            margin: 0;
+            color: #333;
+            font-size: 24px;
+        }
+
+        .modal-info-side {
+            width: 60%;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .info-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .info-tab {
+            padding: 10px 20px;
+            background: #f8f8f8;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #333;
+        }
+
+        .info-tab.active {
+            background: #D7AC1D;
+            color: white;
+        }
+
+        .info-content {
+            padding: 10px 0;
+        }
+
+        .info-panel {
+            display: none;
+        }
+
+        .info-panel.active {
+            display: block;
+        }
+
+        .info-panel p, .info-panel ul {
+            margin: 0 0 15px 0;
+            line-height: 1.6;
+        }
+
+        .info-panel ul {
+            padding-left: 20px;
+        }
+
+        .info-panel li {
+            margin-bottom: 10px;
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 18px;
+            top: 18px;
+            background: transparent;
+            border: none;
+            font-size: 22px;
+            color: black;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .close-modal:hover {
+            color: #555;
+        }
+
+    </style>
+</head>
+<body class="dashboard-body">
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <img src="image/logos.png" alt="Pet Care Logo" class="sidebar-logo" id="sidebarLogo">
+            <button class="toggle-sidebar" id="toggleSidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <div class="sidebar-menu">
+            <a href="breedEncyclopedia.html" class="menu-item">
+                <i class="fas fa-paw"></i>
+                <span>Breed Encyclopedia</span>
+            </a>
+            <a href="bodyLanguage.html" class="menu-item">
+                <i class="fas fa-language"></i>
+                <span>Body Language</span>
+            </a>
+            <a href="latestPetCareTip.html" class="menu-item active">
+                <i class="fas fa-heart"></i>
+                <span>Latest Pet Care Tips</span>
+            </a>
+            <a href="essential.html" class="menu-item">
+                <i class="fas fa-shield-alt"></i>
+                <span>Essential Care</span>
+            </a>
+            <a href="community.html" class="menu-item">
+                <i class="fas fa-users"></i>
+                <span>Community</span>
+            </a>
+            <a href="index.html" class="menu-item" onclick="localStorage.clear();" style="margin-top: auto; color: #000000;">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Sign Out</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="dashboard-content">
+        <div class="content-header">
+            <h1>Latest Pet Care Tips</h1>
+            <p>Discover the newest ways to care for your pets</p>
+        </div>
+        
+        <div class="content-section">
+            <div class="breed-header">
+                <div class="breed-tabs">
+                    <button class="breed-tab active" data-tab="dogs">Dogs</button>
+                    <button class="breed-tab" data-tab="cats">Cats</button>
+                </div>
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search pet care tips..." id="petcareSearch">
+                </div>
+            </div>
+            
+            <!-- Dogs Pet Care Tips -->
+            <div class="breed-section active" id="dogs">
+                <div class="petcare-container">
+                    <div class="petcare-grid">
+                        <div class="petcare-card" data-tip="wearable_tech">
+                            <div class="petcare-info">
+                                <h3 class="petcare-name">Wearable Pet Technology for Health</h3>
+                                <p class="petcare-description">Track your dog's activity and health metrics with smart collars and tags</p>
+                            </div>
+                        </div>
+                        <div class="petcare-card" data-tip="hydration">
+                            <div class="petcare-info">
+                                <h3 class="petcare-name">Hydration and Nutrition Upgrades</h3>
+                                <p class="petcare-description">Smart water fountains and portion-controlled feeders</p>
+                            </div>
+                        </div>
+                        <div class="petcare-card" data-tip="outdoor">
+                            <div class="petcare-info">
+                                <h3 class="petcare-name">Safe Outdoor Adventures</h3>
+                                <p class="petcare-description">GPS trackers and protective gear for hiking and camping</p>
+                            </div>
+                        </div>
+                        <div class="petcare-card" data-tip="neural">
+                            <div class="petcare-info">
+                                <h3 class="petcare-name">Neural Stimulation and Interactive Play</h3>
+                                <p class="petcare-description">Puzzle toys and brain games for mental stimulation</p>
+                            </div>
+                        </div>
+                        <div class="petcare-card" data-tip="aging">
+                            <div class="petcare-info">
+                                <h3 class="petcare-name">Aging and Senior Dog Care</h3>
+                                <p class="petcare-description">Specialized diets and mobility assistance for older dogs</p>
+                            </div>
+                        </div>
+                        <div class="petcare-card" data-tip="grooming">
+                            <div class="petcare-info">
+                                <h3 class="petcare-name">Grooming and Seasonal Care</h3>
+                                <p class="petcare-description">Seasonal coat care and paw protection</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="no-results" style="display: none;">No matching tips found</div>
+                </div>
+            </div>
+
+            <!-- Cats Pet Care Tips -->
+            <div class="breed-section" id="cats">
+                <div class="petcare-container">
+                    <div class="petcare-grid">
+                        <div class="petcare-card" data-tip="litter">
+                            <div class="petcare-info">
+                                <h3 class="petcare-name">Litter-Free and Safe Home Environment</h3>
+                                <p class="petcare-description">Self-cleaning litter boxes and cat-proofing solutions</p>
+                            </div>
+                        </div>
+                        <div class="petcare-card" data-tip="stress">
+                            <div class="petcare-info">
+                                <h3 class="petcare-name">Stress and Anxiety Management</h3>
+                                <p class="petcare-description">Calming diffusers and anxiety-reducing products</p>
+                            </div>
+                        </div>
+                        <div class="petcare-card" data-tip="emergency">
+                            <div class="petcare-info">
+                                <h3 class="petcare-name">Emergency Preparedness</h3>
+                                <p class="petcare-description">First aid kits and evacuation plans for cat owners</p>
+                            </div>
+                        </div>
+                        <div class="petcare-card" data-tip="hydration_cat">
+                            <div class="petcare-info">
+                                <h3 class="petcare-name">Hydration Solutions for Cats</h3>
+                                <p class="petcare-description">Water fountains and moisture-rich diets</p>
+                            </div>
+                        </div>
+                        <div class="petcare-card" data-tip="enrichment">
+                            <div class="petcare-info">
+                                <h3 class="petcare-name">Environmental Enrichment</h3>
+                                <p class="petcare-description">Vertical spaces and interactive toys for indoor cats</p>
+                            </div>
+                        </div>
+                        <div class="petcare-card" data-tip="grooming_cat">
+                            <div class="petcare-info">
+                                <h3 class="petcare-name">Feline Grooming Innovations</h3>
+                                <p class="petcare-description">Low-stress grooming tools and techniques</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="no-results" style="display: none;">No matching tips found</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Pet Care Modal -->
+    <div id="petCareModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="modal-grid">
+                <div class="modal-image-side">
+                    <div class="modal-image-wrapper">
+                        <img id="modalPetCareImage" src="" alt="Pet Care Tip Image">
+                    </div>
+                    <div class="breed-title">
+                        <h2 id="modalPetCareTitle"></h2>
+                    </div>
+                </div>
+                <div class="modal-info-side">
+                    <div class="info-tabs">
+                        <button class="info-tab active" data-tab="overview">Overview</button>
+                        <button class="info-tab" data-tab="benefits">Benefits</button>
+                        <button class="info-tab" data-tab="implementation">Implementation</button>
+                    </div>
+                    <div class="info-content">
+                        <div id="overviewPanel" class="info-panel active">
+                            <p id="modalOverview"></p>
+                        </div>
+                        <div id="benefitsPanel" class="info-panel">
+                            <ul id="modalBenefits"></ul>
+                        </div>
+                        <div id="implementationPanel" class="info-panel">
+                            <ul id="modalImplementation"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize sidebar elements
+            const sidebar = document.querySelector('.sidebar');
+            const sidebarLogo = document.getElementById('sidebarLogo');
+            const toggleBtn = document.getElementById('toggleSidebar');
+            const menuItems = document.querySelectorAll('.menu-item');
+
+            // Set up tooltips for menu items
+            menuItems.forEach(item => {
+                const text = item.querySelector('span').textContent;
+                item.setAttribute('data-tooltip', text);
+            });
+
+            // Handle logo click
+            sidebarLogo.addEventListener('click', () => {
+                sidebar.classList.add('minimized');
+                localStorage.setItem('sidebarMinimized', 'true');
+            });
+
+            // Handle burger icon click
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.remove('minimized');
+                localStorage.setItem('sidebarMinimized', 'false');
+            });
+
+            // Restore sidebar state from localStorage
+            if (localStorage.getItem('sidebarMinimized') === 'true') {
+                sidebar.classList.add('minimized');
+            }
+
+            // Add tab switching functionality
+            const breedTabs = document.querySelectorAll('.breed-tab');
+            const breedSections = document.querySelectorAll('.breed-section');
+
+            breedTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    breedTabs.forEach(t => t.classList.remove('active'));
+                    breedSections.forEach(s => s.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById(tab.dataset.tab).classList.add('active');
+                    const searchInput = document.getElementById('petcareSearch');
+                    if (searchInput) {
+                        searchInput.value = '';
+                        filterPetCareTips('');
+                    }
+                });
+            });
+
+            // Add search functionality
+            const searchInput = document.getElementById('petcareSearch');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    filterPetCareTips(e.target.value.toLowerCase());
+                });
+            }
+
+            function filterPetCareTips(searchTerm) {
+                const activeSection = document.querySelector('.breed-section.active');
+                const petCareCards = activeSection.querySelectorAll('.petcare-card');
+                const noResults = activeSection.querySelector('.no-results');
+                let hasVisibleCards = false;
+
+                petCareCards.forEach(card => {
+                    const petCareName = card.querySelector('.petcare-name').textContent.toLowerCase();
+                    const description = card.querySelector('.petcare-description').textContent.toLowerCase();
+                    const isVisible = petCareName.includes(searchTerm) || description.includes(searchTerm);
+                    card.style.display = isVisible ? 'block' : 'none';
+                    if (isVisible) hasVisibleCards = true;
+                });
+
+                noResults.style.display = hasVisibleCards ? 'none' : 'block';
+            }
+
+            // Initialize pet care tips modal
+            const petCareModal = document.getElementById('petCareModal');
+            const closePetCareModal = petCareModal.querySelector('.close-modal');
+            const petCareCards = document.querySelectorAll('.petcare-card');
+            const infoTabs = petCareModal.querySelectorAll('.info-tab');
+            const infoPanels = petCareModal.querySelectorAll('.info-panel');
+
+            // Pet care tips data
+            const petCareTips = {
+                "wearable_tech": {
+                    "title": "Wearable Pet Technology for Health",
+                    image:"image/petcaretips/wearable (1).jpg",
+                    "overview": "Modern wearable devices help monitor your pet's health and activity levels in real-time, providing valuable insights into their wellbeing.",
+                    "benefits": [
+                        "Tracks activity levels and exercise patterns",
+                        "Monitors heart rate and vital signs continuously",
+                        "Provides GPS location tracking for safety",
+                        "Offers temperature alerts to prevent overheating",
+                        "Syncs with smartphone apps for easy monitoring"
+                    ],
+                    "implementation": [
+                        "Choose a device sized appropriately for your pet's breed",
+                        "Start with short wearing periods to acclimate your pet",
+                        "Regularly check the fit to ensure comfort",
+                        "Monitor data daily for any concerning trends",
+                        "Clean the device regularly according to manufacturer instructions"
+                    ]
+                },
+                "hydration": {
+                    "title": "Hydration and Nutrition Upgrades",
+                    image:"image/petcaretips/image.png",
+                    "overview": "Smart hydration and feeding solutions ensure your pet gets optimal nutrition and stays properly hydrated throughout the day.",
+                    "benefits": [
+                        "Precise portion control for weight management",
+                        "Fresh water always available with filtration",
+                        "Customizable feeding schedules",
+                        "Remote monitoring capabilities",
+                        "Reduces food waste and mess"
+                    ],
+                    "implementation": [
+                        "Place in a quiet, accessible location your pet frequents",
+                        "Clean regularly to prevent bacteria growth",
+                        "Monitor your pet's initial reactions to the new system",
+                        "Adjust settings based on your pet's needs and vet recommendations",
+                        "Gradually transition to the new system over 7-10 days"
+                    ]
+                },
+                "outdoor": {
+                    "title": "Safe Outdoor Adventures",
+                    image:"image/petcaretips/safe.webp",
+                    "overview": "GPS trackers and protective gear help keep your pet safe during outdoor activities like hiking and camping.",
+                    "benefits": [
+                        "Real-time location tracking anywhere",
+                        "Durable, weather-resistant designs",
+                        "Built-in safety lights for visibility",
+                        "Activity monitoring for fitness tracking",
+                        "Long battery life for extended trips"
+                    ],
+                    "implementation": [
+                        "Choose gear appropriate for your pet's size and activity level",
+                        "Test all equipment before major trips",
+                        "Train your pet to wear the gear comfortably",
+                        "Check battery levels before each outing",
+                        "Have backup power options for extended trips"
+                    ]
+                },
+                "neural": {
+                    "title": "Neural Stimulation and Interactive Play",
+                    image:"image/petcaretips/interactive (1).jpg",
+                    "overview": "Puzzle toys and brain games provide essential mental stimulation to keep your pet engaged and happy.",
+                    "benefits": [
+                        "Reduces boredom and destructive behavior",
+                        "Improves problem-solving skills",
+                        "Strengthens bond between pet and owner",
+                        "Provides exercise for indoor pets",
+                        "Slows cognitive decline in older pets"
+                    ],
+                    "implementation": [
+                        "Start with simple puzzles and increase difficulty",
+                        "Rotate toys to maintain interest",
+                        "Use treats appropriate for your pet's diet",
+                        "Supervise initial play sessions",
+                        "Clean toys regularly to prevent bacteria"
+                    ]
+                },
+                "aging": {
+                    "title": "Aging and Senior Dog Care",
+                    image:"image/petcaretips/aging.webp",
+                    "overview": "Specialized care solutions help senior dogs maintain quality of life as they age.",
+                    "benefits": [
+                        "Supports joint health and mobility",
+                        "Specialized nutrition for aging needs",
+                        "Comfortable resting solutions",
+                        "Easy-access feeding systems",
+                        "Health monitoring capabilities"
+                    ],
+                    "implementation": [
+                        "Consult with your vet about specific needs",
+                        "Gradually introduce new routines",
+                        "Provide multiple comfortable resting areas",
+                        "Consider ramps or steps for furniture access",
+                        "Schedule more frequent vet checkups"
+                    ]
+                },
+                "grooming": {
+                    "title": "Grooming and Seasonal Care",
+                    image:"image/petcaretips/grooming.webp",
+                    "overview": "Innovative grooming tools and seasonal care products keep your pet comfortable year-round.",
+                    "benefits": [
+                        "Reduces shedding and hairballs",
+                        "Protects paws from extreme weather",
+                        "Prevents matting and skin issues",
+                        "Specialized formulas for different coat types",
+                        "Low-stress grooming experiences"
+                    ],
+                    "implementation": [
+                        "Establish a regular grooming routine",
+                        "Use products designed for your pet's coat type",
+                        "Introduce tools gradually to avoid fear",
+                        "Check paws regularly during extreme weather",
+                        "Consult a professional groomer for guidance"
+                    ]
+                },
+                "litter": {
+                    "title": "Litter-Free and Safe Home Environment",
+                    image:"image/petcaretips/littercats.jpg",
+                    "overview": "Self-cleaning litter boxes and cat-proofing solutions create a cleaner, safer home for both cats and owners.",
+                    "benefits": [
+                        "Reduces odor and mess",
+                        "Automated cleaning for convenience",
+                        "Encourages consistent litter box use",
+                        "Safety features to protect curious cats",
+                        "Health monitoring capabilities"
+                    ],
+                    "implementation": [
+                        "Place in quiet, accessible locations",
+                        "Gradually transition from old litter box",
+                        "Clean regularly according to instructions",
+                        "Monitor cat's acceptance of new system",
+                        "Have backup traditional litter box available"
+                    ]
+                },
+                "stress": {
+                    "title": "Stress and Anxiety Management",
+                    image:"image/petcaretips/stress.jpg",
+                    "overview": "Calming solutions help reduce feline stress and anxiety in various situations.",
+                    "benefits": [
+                        "Reduces destructive behavior",
+                        "Helps with vet visits and travel",
+                        "Improves multi-cat household harmony",
+                        "Non-medication options available",
+                        "Easy to use at home"
+                    ],
+                    "implementation": [
+                        "Identify stress triggers first",
+                        "Introduce solutions gradually",
+                        "Use consistently for best results",
+                        "Combine multiple approaches if needed",
+                        "Consult vet for severe cases"
+                    ]
+                },
+                "emergency": {
+                    "title": "Emergency Preparedness",
+                    image:"image/petcaretips/eeee.jpg",
+                    "overview": "Specialized kits and plans ensure you're ready to care for your cat in emergencies.",
+                    "benefits": [
+                        "Quick access to essential supplies",
+                        "Clear evacuation plans",
+                        "Medical information organized",
+                        "Reduces stress in emergencies",
+                        "Customizable for your cat's needs"
+                    ],
+                    "implementation": [
+                        "Assemble kit with vet-approved supplies",
+                        "Practice evacuation procedures",
+                        "Keep medical records accessible",
+                        "Rotate food/meds to prevent expiration",
+                        "Identify pet-friendly shelters"
+                    ]
+                },
+                "hydration_cat": {
+                    "title": "Hydration Solutions for Cats",
+                    image:"image/petcaretips/hydrationcats.webp",
+                    "overview": "Innovative products encourage proper hydration, crucial for feline urinary health.",
+                    "benefits": [
+                        "Encourages water consumption",
+                        "Filters for clean, fresh water",
+                        "Multiple drinking location options",
+                        "Monitors water intake",
+                        "Fun designs cats enjoy"
+                    ],
+                    "implementation": [
+                        "Place multiple stations around home",
+                        "Clean and refresh water daily",
+                        "Try different styles to find preference",
+                        "Monitor intake especially for males",
+                        "Combine with wet food for hydration"
+                    ]
+                },
+                "enrichment": {
+                    "title": "Environmental Enrichment",
+                    image:"image/petcaretips/environmental.jpg",
+                    "overview": "Vertical spaces and interactive toys satisfy cats' natural instincts in indoor environments.",
+                    "benefits": [
+                        "Reduces stress and boredom",
+                        "Provides exercise opportunities",
+                        "Creates territory in multi-cat homes",
+                        "Stimulates natural behaviors",
+                        "Strengthens bond with owners"
+                    ],
+                    "implementation": [
+                        "Start with simple additions",
+                        "Observe which features your cat prefers",
+                        "Rotate toys to maintain interest",
+                        "Include vertical and horizontal options",
+                        "Provide safe outdoor viewing spots"
+                    ]
+                },
+                "grooming_cat": {
+                    "title": "Feline Grooming Innovations",
+                    image:"image/petcaretips/groomingcats.webp",
+                    "overview": "New tools and techniques make grooming less stressful for cats and owners.",
+                    "benefits": [
+                        "Reduces hairballs",
+                        "Prevents matting",
+                        "Early detection of skin issues",
+                        "Bonding opportunity",
+                        "Low-stress experience"
+                    ],
+                    "implementation": [
+                        "Start with short sessions",
+                        "Use treats to create positive association",
+                        "Choose the right tools for coat type",
+                        "Watch for signs of stress",
+                        "Consult professional groomers if needed"
+                    ]
+                }
+            };
+
+            // Add click event to pet care cards
+            petCareCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const tipId = card.dataset.tip;
+                    const tipData = petCareTips[tipId];
+
+                    if (!tipData) {
+                        console.error('Pet care tip data not found:', tipId);
+                        return;
+                    }
+
+                    // Update modal content
+                    document.getElementById('modalPetCareImage').src = tipData.image;
+                    document.getElementById('modalPetCareTitle').textContent = tipData.title;
+                    
+                    // Overview
+                    document.getElementById('modalOverview').textContent = tipData.overview;
+                    
+                    // Benefits
+                    const benefitsList = document.getElementById('modalBenefits');
+                    benefitsList.innerHTML = tipData.benefits.map(benefit => 
+                        `<li>${benefit}</li>`
+                    ).join('');
+                    
+                    // Implementation
+                    const implementationList = document.getElementById('modalImplementation');
+                    implementationList.innerHTML = tipData.implementation.map(step => 
+                        `<li>${step}</li>`
+                    ).join('');
+
+                    // Reset to first tab
+                    infoTabs.forEach(t => t.classList.remove('active'));
+                    infoPanels.forEach(p => p.classList.remove('active'));
+                    infoTabs[0].classList.add('active');
+                    infoPanels[0].classList.add('active');
+
+                    // Show modal with animation
+                    petCareModal.style.display = 'flex';
+                    setTimeout(() => {
+                        petCareModal.classList.add('show');
+                        document.body.style.overflow = 'hidden';
+                    }, 10);
+                });
+            });
+
+            // Handle tab switching in modal
+            infoTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    infoTabs.forEach(t => t.classList.remove('active'));
+                    infoPanels.forEach(p => p.classList.remove('active'));
+
+                    tab.classList.add('active');
+                    const panelId = tab.dataset.tab + 'Panel';
+                    document.getElementById(panelId).classList.add('active');
+                });
+            });
+
+            // Close modal function with animation
+            function closePetCareModalFunction() {
+                petCareModal.classList.remove('show');
+                setTimeout(() => {
+                    petCareModal.style.display = 'none';
+                    document.body.style.overflow = '';
+                }, 300);
+            }
+
+            // Close modal when clicking the close button
+            if (closePetCareModal) {
+                closePetCareModal.addEventListener('click', closePetCareModalFunction);
+            }
+
+            // Close modal when clicking outside
+            window.addEventListener('click', (event) => {
+                if (event.target === petCareModal) {
+                    closePetCareModalFunction();
+                }
+            });
+
+            // Close modal with escape key
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && petCareModal.classList.contains('show')) {
+                    closePetCareModalFunction();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

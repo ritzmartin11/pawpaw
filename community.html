@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community - Pet Care Guide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* General Reset */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+
+        /* Main Content Area */
+        .community-container {
+            margin-left: 270px;
+            padding: 20px;
+            background: linear-gradient(to bottom, #FFDD44, #E2B206);
+            min-height: 100vh;
+        }
+
+        .community-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .community-header img {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            width: 120px;
+        }
+
+        /* Create Post Section */
+        .create-post {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            margin: 50px 50px;
+        }
+
+        .create-post textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: none;
+        }
+
+        .post-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .post-options label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .post-options label i {
+            margin-right: 5px;
+        }
+
+        .post-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Post Card Styles */
+        .post-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            margin: 50px 50px;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .post-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .post-header .username {
+            font-weight: bold;
+        }
+
+        .post-content {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .post-image {
+            width: 300px;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .post-actions i {
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        .post-actions .likes { color: red; }
+        .post-actions .comments { color: #007bff; }
+        .post-actions .shares { color: #28a745; }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <img src="image/logos.png" alt="Pet Care Logo" class="sidebar-logo">
+        
+        <a href="breedEncyclopedia.html" class="menu-item">
+            <i class="fas fa-paw"></i> Breed Encyclopedia
+        </a>
+        <a href="bodyLanguage.html" class="menu-item">
+            <i class="fas fa-language"></i> Body Language
+        </a>
+        <a href="latestPetCareTip.html" class="menu-item">
+            <i class="fas fa-heart"></i> Latest Pet Care Tips
+        </a>
+        <a href="essential.html" class="menu-item">
+            <i class="fas fa-shield-alt"></i>
+            <span>Essential Care</span>
+        </a>
+        <a href="community.html" class="menu-item active">
+            <i class="fas fa-users"></i> Community
+        </a>
+        <a href="index.html" class="menu-item" onclick="localStorage.clear();" style="margin-top: auto;">
+            <i class="fas fa-sign-out-alt"></i> Sign Out
+        </a>
+    </nav>
+
+    <!-- Community Section -->
+    <section class="community-container">
+        <div class="community-header">
+            Community
+        </div>
+
+        <!-- Create Post Section -->
+        <div class="create-post">
+            <textarea placeholder="What's on your mind?"></textarea>
+            <div class="post-options">
+                <div>
+                    <label><i class="fas fa-image"></i> Image</label>
+                    <label><i class="fas fa-video"></i> Video</label>
+                </div>
+                <button class="post-btn">Post</button>
+            </div>
+        </div>
+
+        <!-- Sample Posts -->
+        <div class="post-card">
+            <div class="post-header">
+                <img src="image/community/pfp.png" alt="User">
+                <span class="username">James Bayne</span>
+            </div>
+            <div class="post-content">
+                "Dogs’ noses are like human fingerprints – each one is unique! Have you noticed your pet’s special nose print?"
+            </div>
+            <img src="image/community/1.webp" alt="Dog Nose" class="post-image">
+            <div class="post-actions">
+                <span class="likes"><i class="fas fa-heart"></i> 199 Likes</span>
+                <span class="comments"><i class="fas fa-comment"></i> 27 Comments</span>
+                <span class="shares"><i class="fas fa-share"></i> 23 Shares</span>
+            </div>
+        </div>
+
+        <div class="post-card">
+            <div class="post-header">
+                <img src="image/community/pfp.png" alt="User">
+                <span class="username">Jocelyn Reyes</span>
+            </div>
+            <div class="post-content">
+                "Did you know? Cats sleep about 12-16 hours a day! 😺 How long does your cat nap?"
+            </div>
+            <img src="image/community/1.webp" alt="Cat Sleeping" class="post-image">
+            <div class="post-actions">
+                <span class="likes"><i class="fas fa-heart"></i> 98 Likes</span>
+                <span class="comments"><i class="fas fa-comment"></i> 38 Comments</span>
+                <span class="shares"><i class="fas fa-share"></i> 12 Shares</span>
+            </div>
+        </div>
+
+    </section>
+
+</body>
+</html>
